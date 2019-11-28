@@ -89,6 +89,29 @@ public class AuthorFileData implements AuthorData {
         return authors;
     }
 
+    @Override
+    public List<Author> getAllAuthors() {
+        log.info("Try to find all authors...\n");
+
+        List<Author> authors = new ArrayList<>();
+
+        try (Stream<String> lines = Files.lines(Paths.get(filePath))) {
+            authors = lines.map(s -> g.fromJson(s, Author.class)).collect(Collectors.toList());
+            if (authors.isEmpty()) {
+                log.error("File by path " + filePath + " is empty!");
+                throw new FileIsEmptyException();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        log.info("try to sort all authors");
+        authors = sort(authors, AUTHOR_ID, ASCENDING, authors.size());
+        log.info(authors.size() + " authors found!");
+
+        return authors;
+    }
+
     /**
      * Get first N (or 10 if not specified) authors sorted by custom key in custom (asc/desc) order
      * <p>

@@ -4,6 +4,7 @@ import ua.com.epam.entity.author.nested.Birth;
 import ua.com.epam.entity.author.nested.Name;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class Author {
     private Long authorId;

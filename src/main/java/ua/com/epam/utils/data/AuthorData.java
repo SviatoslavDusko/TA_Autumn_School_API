@@ -9,5 +9,7 @@ public interface AuthorData {
 
     List<Author> getDefaultAuthors();
 
+    List<Author> getAllAuthors();
+
     List<Author> getSorted(String keyToSortBy, String order, int... count);
 }

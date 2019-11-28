@@ -79,6 +79,31 @@ public class AuthorDBData implements AuthorData {
     }
 
     @Override
+    public List<Author> getAllAuthors() {
+        log.info("Try to find all authors...");
+        execute(String.format(SELECT_DEFAULTS, dp.dbName(), AUTHOR, AUTHOR_ID));
+        List<Author> authors = new ArrayList<>();
+        try {
+            int i = 0;
+            if (!resultSet.next()) {
+                log.error("No one author was found! Author table is empty!");
+            } else {
+                do {
+                    authors.add(mapResultSetObjToAuthor(resultSet));
+                    i++;
+                } while (resultSet.next());
+                log.info("Found " + i + " AUTHORS successfully!");
+            }
+        } catch (SQLException e) {
+            log.error("DB access error occurs or method is called on a closed ResultSet!!!");
+            e.printStackTrace();
+        }
+
+        close();
+        return authors;
+    }
+
+    @Override
     public List<Author> getSorted(String sortBy, String order, int... count) {
         int limit = count.length == 0 ? 10 : count[0];
 
